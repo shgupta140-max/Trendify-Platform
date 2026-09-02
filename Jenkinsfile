@@ -4,6 +4,7 @@ pipeline {
     agent any
 
     environment {
+        AWS_REGION   = "ap-south-1"
         CLUSTER_NAME = "trendstore-cluster" 
         NAMESPACE    = "monitoring"
     }
