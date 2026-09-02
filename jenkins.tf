@@ -1,10 +1,10 @@
 resource "aws_instance" "jenkins-master" {
   ami                    = "ami-01a00762f46d584a1" # Ubuntu AMI in ap-south-1
-  instance_type          = "t3.medium"  
+  instance_type          = "t3.medium"
   key_name               = "devops-key"
   vpc_security_group_ids = ["sg-0827faf1bd8e7f168"]
   iam_instance_profile   = "Jenkins-EC2-Profile"
-  user_data = <<-EOF
+  user_data              = <<-EOF
     #!/bin/bash
     set -e # Exit immediately if a command fails
 
@@ -57,11 +57,15 @@ resource "aws_instance" "jenkins-master" {
     unzip awscliv2.zip
     ./aws/install
 
+    # 8. Install Helm
+    curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+    chmod 700 get_helm.sh
+    ./get_helm.sh
   EOF
 
   root_block_device {
     volume_type = "gp3"
-    volume_size = 30    
+    volume_size = 30
   }
 
   tags = {
