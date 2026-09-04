@@ -37,7 +37,7 @@ pipeline {
                         --namespace ${NAMESPACE} \
                         -f monitoring/custom-values.yml \
                         --wait \
-                        --atomic
+                        --atomic \
                         --cleanup-on-fail
                 '''
             }
