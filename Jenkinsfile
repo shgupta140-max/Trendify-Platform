@@ -36,8 +36,17 @@ pipeline {
                     helm upgrade --install prometheus-stack prometheus-community/kube-prometheus-stack \
                         --namespace ${NAMESPACE} \
                         -f monitoring/custom-values.yml \
-                        --wait
+                        --wait \
+                        --atomic
+                        --cleanup-on-fail
                 '''
+            }
+        }
+
+        stage('Deploy ServiceMonitor for Trendify') {
+            steps {
+                // Apply the ServiceMonitor configuration
+                sh "kubectl apply -f service-monitor.yml -n ${NAMESPACE}"
             }
         }
     }
