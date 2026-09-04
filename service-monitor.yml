@@ -4,14 +4,18 @@ metadata:
   name: trendify-monitor
   namespace: monitoring
   labels:
-    # This label is critical: it tells the Prometheus Operator to pick up this configuration
     release: prometheus-stack
 spec:
+  # 1. Match the labels on your Kubernetes Service
   selector:
     matchLabels:
-      # Match the labels of your Trendify Kubernetes Service
       app: trendstore
+  # 2. Tell Prometheus to look in the application's namespace
+  namespaceSelector:
+    matchNames:
+      - trendstore
   endpoints:
-    - port: http # Must match the port name defined in your Trendify Service
+    # 3. Must match the name of the port in your Service YAML
+    - port: http 
       path: /metrics
       interval: 15s
