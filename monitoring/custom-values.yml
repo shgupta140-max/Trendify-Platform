@@ -10,9 +10,15 @@ grafana:
     annotations:
       alb.ingress.kubernetes.io/scheme: internet-facing
       alb.ingress.kubernetes.io/target-type: ip
-      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
-      # Optional: Add this if you want to use a custom domain later
-      # external-dns.alpha.kubernetes.io/hostname: grafana.trendify.com
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+      alb.ingress.kubernetes.io/load-balancer-name: monitoring-alb
+      # COMMENT OUT OR REMOVE THESE:
+      # alb.ingress.kubernetes.io/ssl-redirect: '443'
+      # alb.ingress.kubernetes.io/certificate-arn: ...
+    # Completely remove or comment out the `hosts:` block 
+    # so Helm uses the default wildcard routing
+    # hosts:
+    #  - ""
     hosts:
       - "" # Leaving empty creates a wildcard ALB route for testing
       
