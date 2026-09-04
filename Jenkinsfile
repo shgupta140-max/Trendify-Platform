@@ -35,7 +35,7 @@ pipeline {
                 sh '''
                     helm upgrade --install prometheus-stack prometheus-community/kube-prometheus-stack \
                         --namespace ${NAMESPACE} \
-                        -f monitoring/custom-values.yaml \
+                        -f monitoring/custom-values.yml \
                         --wait
                 '''
             }
