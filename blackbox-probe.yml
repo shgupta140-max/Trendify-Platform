@@ -9,7 +9,7 @@ spec:
   jobName: trendstore-http-check
   # Use the built-in http_2xx module (checks for HTTP 200-299 status codes)
   prober:
-    url: prometheus-blackbox-exporter.monitoring.svc.cluster.local:9115
+    url: blackbox-prometheus-blackbox-exporter.monitoring.svc.cluster.local:9115
   targets:
     staticConfig:
       static:

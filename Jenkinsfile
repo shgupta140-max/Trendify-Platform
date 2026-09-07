@@ -40,6 +40,7 @@ pipeline {
                         --atomic \
                         --cleanup-on-fail
                 '''
+                sh "helm upgrade --install blackbox prometheus-community/prometheus-blackbox-exporter --namespace ${NAMESPACE} --wait --atomic --cleanup-on-fail"
             }
         }
 
