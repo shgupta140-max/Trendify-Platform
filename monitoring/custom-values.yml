@@ -24,7 +24,6 @@ grafana:
       
 prometheus:
   prometheusSpec:
-    # Ensure Prometheus data survives pod restarts
     storageSpec:
       volumeClaimTemplate:
         spec:
@@ -35,7 +34,9 @@ prometheus:
           # EKS default storage class
           storageClassName: gp2 
 
-# Disable default rules that are too noisy or irrelevant for your setup
+prometheus-blackbox-exporter:
+  enabled: true
+
 defaultRules:
   create: true
   rules:

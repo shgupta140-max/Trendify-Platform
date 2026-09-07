@@ -43,10 +43,12 @@ pipeline {
             }
         }
 
-        stage('Deploy ServiceMonitor for Trendify') {
+        stage('Deploy ServiceMonitor and BlackBox Probe for Trendify') {
             steps {
                 // Apply the ServiceMonitor configuration
                 sh "kubectl apply -f service-monitor.yml -n ${NAMESPACE}"
+                // Apply the BlackBox Probe configuration
+                sh "kubectl apply -f blackbox-probe.yml -n ${NAMESPACE}"
             }
         }
     }

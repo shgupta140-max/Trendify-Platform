@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: trendstore-http-probe
+  namespace: monitoring
+  labels:
+    release: prometheus-stack # Must match your Helm release label so the operator picks it up
+spec:
+  jobName: trendstore-http-check
+  # Use the built-in http_2xx module (checks for HTTP 200-299 status codes)
+  prober:
+    url: prometheus-blackbox-exporter.monitoring.svc.cluster.local:9115
+  targets:
+    staticConfig:
+      static:
+        # Target your application service directly on port 3000 (or use its DNS name)
+        - http://trendstore-service.trendstore.svc.cluster.local:3000/
+  interval: 30s
+  scrapeTimeout: 10s
