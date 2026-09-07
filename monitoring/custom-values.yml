@@ -34,7 +34,7 @@ prometheus:
           # EKS default storage class
           storageClassName: gp2 
 
-prometheus-blackbox-exporter:
+blackboxExporter:
   enabled: true
   serviceMonitor:
     enabled: true
