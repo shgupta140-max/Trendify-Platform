@@ -36,6 +36,8 @@ prometheus:
 
 prometheus-blackbox-exporter:
   enabled: true
+  serviceMonitor:
+    enabled: true
 
 defaultRules:
   create: true
