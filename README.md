@@ -2,6 +2,27 @@
 
 Infrastructure and monitoring configuration for the Trendify application platform. This repository provisions a Jenkins controller on AWS and uses Jenkins to install and configure the Kubernetes monitoring stack for the `trendstore` application running on Amazon EKS.
 
+## 🌐 Trendify Project Ecosystem
+
+This repository is part of the **Trendify Enterprise Cloud Platform**, a fully automated, GitOps-driven, two-tier application stack. To enforce a strict separation of concerns, the architecture is decoupled into four distinct repositories:
+
+1. **[Trendify-Platform](https://github.com/shgupta140-max/trendify-platform.git) (Automation & Observability):**
+   * **Role:** The foundational layer. Contains Terraform code to provision the Jenkins CI/CD automation server and Helm configurations to deploy the centralized monitoring stack (`kube-prometheus-stack` & `blackbox-exporter`).
+
+2. **[Trendify-Infra]( https://github.com/shgupta140-max/Trendify-Infra.git) (Cloud Infrastructure):**
+   * **Role:** The immutable AWS infrastructure layer. Contains Terraform modules to provision the production-grade Amazon EKS cluster (`trendstore-cluster` in `ap-south-1`), VPC networks, IAM Access Entries, and the AWS ALB Controller.
+
+3. **[Trendify-App](https://github.com/shgupta140-max/Trendify-App.git) (Application Code & CI):**
+   * **Role:** The product layer. Houses the Node.js application source code, Dockerfile, and the Continuous Integration (CI) Jenkins pipeline. 
+   * **Connection:** This pipeline builds the image, pushes it to DockerHub, and automatically commits the new image tag directly into the `Trendify-GitOps` repository.
+
+4. **[Trendify-GitOps](https://github.com/shgupta140-max/Trendify-GitOps.git) (Cluster State & CD):**
+   * **Role:** The single source of truth for the Kubernetes cluster state. Contains the application deployment manifests and Kustomize overlays.
+   * **Connection:** Triggered by commits from `Trendify-App`, this Jenkins pipeline requires manual Slack approval before deploying changes to the `Trendify-Infra` EKS cluster and dynamically injecting the AWS ALB URL into the monitoring probes.
+
+---
+
+
 ## What This Repository Does
 
 - Provisions an Ubuntu-based Jenkins EC2 instance with Terraform.
