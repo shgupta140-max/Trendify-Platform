@@ -50,13 +50,20 @@ pipeline {
                 // Apply the ServiceMonitor configuration
                 sh "kubectl apply -f service-monitor.yml -n ${NAMESPACE}"
                 echo "Waiting for ALB URL to be generated..."
-                sleep 30
-                ALB_URL=$(kubectl get ingress trendstore-alb -n ${APP_NAMESPACE} -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-                echo "ALB URL: ${ALB_URL}"
-                // Replace placeholder in blackbox-probe.yml with the actual ALB URL
-                sed -i "s/__ALB_DNS_NAME__/$ALB_URL/g" blackbox-probe.yml
-                // Apply the BlackBox Probe configuration
-                sh "kubectl apply -f blackbox-probe.yml -n ${NAMESPACE}"
+                sleep time: 30, unit: 'SECONDS' // Native Jenkins sleep step
+                script {
+                    // Execute kubectl in bash, capture the output, and store it in a Groovy variable
+                    def ALB_URL = sh(
+                    script: "kubectl get ingress trendstore-alb -n ${APP_NAMESPACE} -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'", 
+                    returnStdout: true
+                    ).trim()
+                    echo "ALB URL: ${ALB_URL}"            
+                    // Inject the Groovy variable into the sed command
+                    sh "sed -i 's/__ALB_DNS_NAME__/${ALB_URL}/g' blackbox-probe.yml"
+            
+                    // Apply the final Probe configuration
+                    sh "kubectl apply -f blackbox-probe.yml -n ${NAMESPACE}"
+                }
             }
         }
     }
