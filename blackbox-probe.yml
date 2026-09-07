@@ -15,5 +15,6 @@ spec:
       static:
         # Target your application service directly on port 3000 (or use its DNS name)
         - http://trendstore-service.trendstore.svc.cluster.local:3000/
+        - http://__ALB_DNS_NAME__/
   interval: 30s
   scrapeTimeout: 10s
